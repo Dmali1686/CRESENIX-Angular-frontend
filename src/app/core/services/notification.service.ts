@@ -1,7 +1,7 @@
 import { Injectable, inject, effect } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, delay, map, BehaviorSubject, catchError } from 'rxjs';
-import { Notification } from '../../shared/models/index';
+import type { Notification } from '../../shared/models/index';
 import { MOCK_NOTIFICATIONS } from '../mocks/index';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../auth/auth.service';
@@ -43,6 +43,7 @@ export class NotificationService {
         if (isAuth) {
           this.refreshNotifications();
           this.connectSSE();
+          this.requestNotificationPermission();
         } else {
           this.disconnectSSE();
         }
@@ -90,9 +91,13 @@ export class NotificationService {
           // Dedup by ID before prepending
           if (!current.some(n => n.id === notif.id)) {
             this.notifications.next([notif, ...current]);
-            // Broadcast live alert for toast banner (auto-clears after 5s)
+            // Play subtle audio chime
+            this.playChime();
+            // Show browser desktop notification if supported
+            this.showDesktopNotification(notif);
+            // Broadcast live alert for toast banner (auto-clears after 6s)
             this._liveAlert.next(notif);
-            setTimeout(() => this._liveAlert.next(null), 5000);
+            setTimeout(() => this._liveAlert.next(null), 6000);
           }
         } catch {
           // Ignore malformed or heartbeat-only SSE events
@@ -114,6 +119,55 @@ export class NotificationService {
     } catch {
       // EventSource initialization handled silently in production
     }
+  }
+
+  /** Plays a subtle modern audio chime using Web Audio API */
+  private playChime(): void {
+    try {
+      if (typeof window === 'undefined') return;
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+      osc.frequency.setValueAtTime(880.00, ctx.currentTime + 0.08); // A5
+
+      gain.gain.setValueAtTime(0.12, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4);
+
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.4);
+    } catch {
+      // Audio autoplay gracefully handled if restricted
+    }
+  }
+
+  /** Displays native browser desktop notification if permitted */
+  private showDesktopNotification(notif: Notification): void {
+    try {
+      if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
+        new Notification(notif.title, {
+          body: notif.message,
+          icon: '/favicon.ico'
+        });
+      }
+    } catch {
+      // Desktop notification silently handled
+    }
+  }
+
+  /** Request desktop notification permission from user */
+  requestNotificationPermission(): void {
+    try {
+      if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission();
+      }
+    } catch {}
   }
 
   /** Call on logout to cleanly close the SSE stream */
