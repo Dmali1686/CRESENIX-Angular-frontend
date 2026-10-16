@@ -63,17 +63,6 @@ import { AuthService } from '../../../core/auth/auth.service';
             <p>Sign in to your CRESENIX workspace</p>
           </div>
 
-          <!-- Quick Login Fill (seeded accounts) -->
-          <div class="demo-roles">
-            <p class="demo-label">Quick fill (seeded accounts):</p>
-            <div class="demo-pills">
-              <button class="demo-pill" (click)="fillDemo('arjun@cresenix.com')" type="button">Sales Team (Arjun)</button>
-              <button class="demo-pill" (click)="fillDemo('kavita@cresenix.com')" type="button">Employee (Kavita)</button>
-              <button class="demo-pill" (click)="fillDemo('superadmin@cresenix.com')" type="button">Super Admin</button>
-              <button class="demo-pill" (click)="fillDemo('admin@cresenix.com')" type="button">Admin</button>
-            </div>
-          </div>
-
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" novalidate>
             <div class="form-group">
               <label for="email">Email Address <span class="required">*</span></label>
@@ -169,12 +158,6 @@ export class LoginComponent {
       password: ['', [Validators.required, Validators.minLength(4)]],
       rememberMe: [false]
     });
-  }
-
-  fillDemo(email: string): void {
-    // Uses the real seeded password for all demo accounts
-    this.loginForm.patchValue({ email, password: 'Admin@123' });
-    this.errorMsg.set('');
   }
 
   get emailError(): string {
