@@ -963,48 +963,70 @@ function toLocalDateStr(d: Date): string {
   `,
   styles: [`
     .page-container {
-      padding: 24px;
-      max-width: 1400px;
+      padding: 12px 20px 20px;
+      max-width: 1440px;
       margin: 0 auto;
+    }
+
+    .page-header {
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .title-with-badge {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+    }
+
+    .page-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-navy);
+      margin: 0;
+    }
+
+    .page-subtitle {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      margin: 2px 0 0;
     }
 
     .role-pill {
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      padding: 3px 10px;
+      padding: 2px 8px;
       border-radius: 999px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       background: #EFF6FF;
       color: #1D4ED8;
       border: 1px solid #BFDBFE;
 
       .material-icons {
-        font-size: 14px;
+        font-size: 13px;
       }
     }
 
     .month-nav {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       background: white;
       border: 1px solid var(--color-border);
       border-radius: var(--radius-md);
-      padding: 4px 8px;
+      padding: 3px 6px;
 
       .current-month-label {
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 600;
         color: var(--color-navy);
-        min-width: 130px;
+        min-width: 120px;
         text-align: center;
       }
     }
@@ -1014,10 +1036,10 @@ function toLocalDateStr(d: Date): string {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 12px 18px;
-      border-radius: 8px;
-      margin-bottom: 18px;
-      font-size: 13px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      font-size: 12px;
       font-weight: 600;
       animation: fadeIn 0.2s ease-out;
 
@@ -1048,23 +1070,23 @@ function toLocalDateStr(d: Date): string {
     .calendar-legend {
       display: flex;
       align-items: center;
-      gap: 16px;
-      padding: 10px 16px;
+      gap: 14px;
+      padding: 5px 12px;
       background: #F8FAFC;
       border-bottom: 1px solid var(--color-border);
-      font-size: 12px;
+      font-size: 11px;
       color: var(--color-text-secondary);
 
       .legend-item {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 5px;
         font-weight: 500;
       }
 
       .legend-dot {
-        width: 8px;
-        height: 8px;
+        width: 7px;
+        height: 7px;
         border-radius: 50%;
 
         &.task-dot { background: #2563EB; }
@@ -1080,7 +1102,7 @@ function toLocalDateStr(d: Date): string {
         font-weight: 500;
 
         .material-icons {
-          font-size: 16px;
+          font-size: 14px;
           color: #2563EB;
         }
       }
@@ -1089,8 +1111,9 @@ function toLocalDateStr(d: Date): string {
     .calendar-card {
       padding: 0;
       overflow: hidden;
-      margin-bottom: 24px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border-radius: 8px;
     }
 
     .calendar-weekdays {
@@ -1101,8 +1124,8 @@ function toLocalDateStr(d: Date): string {
       text-align: center;
 
       .weekday {
-        padding: 10px;
-        font-size: 12px;
+        padding: 5px 6px;
+        font-size: 11px;
         font-weight: 700;
         color: var(--color-text-secondary);
         text-transform: uppercase;
@@ -1113,15 +1136,15 @@ function toLocalDateStr(d: Date): string {
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      grid-auto-rows: minmax(130px, 1fr);
+      grid-auto-rows: minmax(76px, 1fr);
 
       .calendar-cell {
         border-right: 1px solid var(--color-border);
         border-bottom: 1px solid var(--color-border);
-        padding: 8px;
+        padding: 4px 6px;
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 3px;
         background: white;
         cursor: pointer;
         position: relative;
@@ -1166,15 +1189,15 @@ function toLocalDateStr(d: Date): string {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 4px;
-      font-size: 11px;
+      gap: 3px;
+      font-size: 10px;
       font-weight: 700;
       color: #1D4ED8;
       pointer-events: none;
       z-index: 5;
 
       .material-icons {
-        font-size: 24px;
+        font-size: 20px;
       }
     }
 
@@ -1182,13 +1205,14 @@ function toLocalDateStr(d: Date): string {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      height: 18px;
 
       .day-number {
-        font-size: 13px;
+        font-size: 11.5px;
         font-weight: 600;
         color: var(--color-text-primary);
-        width: 24px;
-        height: 24px;
+        width: 18px;
+        height: 18px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1204,16 +1228,17 @@ function toLocalDateStr(d: Date): string {
       .header-right {
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: 3px;
       }
 
       .cell-counter {
-        font-size: 10px;
+        font-size: 9px;
         font-weight: 700;
         background: #E2E8F0;
         color: var(--color-text-secondary);
         border-radius: 999px;
-        padding: 1px 6px;
+        padding: 0 4px;
+        line-height: 14px;
       }
 
       .add-cell-btn {
@@ -1224,8 +1249,8 @@ function toLocalDateStr(d: Date): string {
         border: 1px solid #C7D2FE;
         color: #4F46E5;
         border-radius: 50%;
-        width: 22px;
-        height: 22px;
+        width: 16px;
+        height: 16px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1233,7 +1258,7 @@ function toLocalDateStr(d: Date): string {
         padding: 0;
 
         .material-icons {
-          font-size: 14px;
+          font-size: 11px;
         }
 
         &:hover {
@@ -1246,18 +1271,28 @@ function toLocalDateStr(d: Date): string {
     .cell-content-list {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 2px;
       flex: 1;
-      overflow: hidden;
+      overflow-y: auto;
+      max-height: 52px;
+
+      &::-webkit-scrollbar {
+        width: 2px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: #CBD5E1;
+        border-radius: 2px;
+      }
     }
 
     .cal-item {
       display: flex;
       align-items: center;
-      gap: 5px;
-      padding: 4px 6px;
-      border-radius: 4px;
-      font-size: 11px;
+      gap: 4px;
+      padding: 1.5px 5px;
+      border-radius: 3px;
+      font-size: 10.5px;
+      line-height: 1.25;
       font-weight: 500;
       color: var(--color-text-primary);
       text-decoration: none;
