@@ -1,0 +1,66 @@
+services:
+  # ============================================================
+  # 1. CRESENIX Solutions — Go API Web Service
+  # ============================================================
+  - type: web
+    name: cresenix-backend
+    runtime: go
+    rootDir: backend
+    buildCommand: go build -o bin/api ./cmd/api
+    startCommand: ./bin/api
+    plan: free
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cresenix-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRY_HOURS
+        value: 24
+      - key: JWT_REFRESH_EXPIRY_HOURS
+        value: 168
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://*.onrender.com,http://localhost:4200,http://localhost:8765
+      - key: APP_NAME
+        value: CRESENIX Solutions
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_USERNAME
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: SMTP_FROM
+        sync: false
+
+  # ============================================================
+  # 2. CRESENIX Solutions — Angular Frontend (Static Site)
+  # ============================================================
+  - type: web
+    name: cresenix-frontend
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist/cresenix-solutions/browser
+    plan: free
+    routes:
+      - type: rewrite
+        source: /api/*
+        destination: https://cresenix-backend.onrender.com/api/*
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+databases:
+  # ============================================================
+  # 3. PostgreSQL Database
+  # ============================================================
+  - name: cresenix-db
+    databaseName: cresenix_db
+    user: postgres
+    plan: free
